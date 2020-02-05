@@ -108,7 +108,7 @@ public abstract class Pokemon {
 	public boolean isCriticalHit() {
 		boolean result = false;
 		Random criticalHit = new Random();
-		if(criticalHit.nextInt(1) == 0) {
+		if(criticalHit.nextInt(50) == 0) {
 			result = true;
 		}
 		return result;
