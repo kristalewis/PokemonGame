@@ -14,6 +14,7 @@ public class Bulbasaur extends Pokemon {
 		super.setMovesDamageMap(bulbasaurMoves, bulbasaurMoveValues);
 		super.setMovesTypeMap(bulbasaurMoves, bulbasaurMoveTypes);
 		super.setWeaknesses(bulbasaurWeaknesses);
+		super.setStrengths(bulbasaurStrengths);
 	}
 	
 	@Override

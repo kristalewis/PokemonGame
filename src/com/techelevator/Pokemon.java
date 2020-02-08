@@ -15,10 +15,11 @@ public abstract class Pokemon {
 	String[] moves = new String[4];
 	Map<String, Integer> moveDamageMap = new HashMap<String, Integer>();
 	Map<String, String> moveTypeMap = new HashMap<String, String>();
-	String[] types = new String[] {"bug", "dragon", "electric", "fighting", "fire", "flying", "ghost", "grass", 
-								   "ground", "ice", "normal", "poison", "psychic", "rock", "water"};
+//	String[] types = new String[] {"bug", "dragon", "electric", "fighting", "fire", "flying", "ghost", "grass", 
+//								   "ground", "ice", "normal", "poison", "psychic", "rock", "water"};
 	List<String> weaknesses = new ArrayList <String>();
 	List<String> strengths = new ArrayList <String>();
+	int attackStatChange = 0;
 	
 	
 	public Pokemon (String name, int hP, String type) {
@@ -35,8 +36,20 @@ public abstract class Pokemon {
 		return hP;
 	}
 	
+	public void sethP(int hP) {
+		this.hP = hP;
+	}
+	
 	public String getType() {
 		return type;
+	}
+	
+	public int getAttackStatChange() {
+		return attackStatChange;
+	}
+	
+	public void setAttackStatChange(int attackStatChange) {
+		this.attackStatChange += attackStatChange;
 	}
 	
 	public void setMoves(String[] moves) {
