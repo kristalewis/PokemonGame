@@ -9,7 +9,7 @@ public class Bulbasaur extends Pokemon {
 	String[] bulbasaurStrengths = new String[] {"water", "grass", "electric", "ground"};
 	
 	public Bulbasaur() {
-		super("Bulbasaur", 24, "grass");
+		super("Bulbasaur", 24, "grass/poison");
 		super.setMoves(bulbasaurMoves);
 		super.setMovesDamageMap(bulbasaurMoves, bulbasaurMoveValues);
 		super.setMovesTypeMap(bulbasaurMoves, bulbasaurMoveTypes);

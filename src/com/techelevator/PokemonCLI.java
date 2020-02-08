@@ -11,11 +11,14 @@ public class PokemonCLI {
 		
 		for(int i = 1; i < 3; i++) {
 			System.out.println("Choose pokemon number " + i + "!");
-			System.out.print("(B)bulasaur, (C)harmander, (S)quirtle, (E)evee? ");
+			System.out.print("(B)bulasaur, (C)harmander, (S)quirtle, (E)evee, or (P)ikachu? ");
 			String input = scan.nextLine();
-			if (battle.createBattlePokemon(input).equals("")) {
+			String announcement = battle.createBattlePokemon(input);
+			if (announcement.equals("")) {
 				i--;
 				System.out.println("That's not a valid pokemon, choose again!");
+			} else {
+				System.out.println(announcement);
 			}
 			
 			System.out.println();
