@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ArrayBlockingQueue;
 
-public abstract class Pokemon {
+public class Pokemon {
 
 	private String name;
 	private int hP;
@@ -19,6 +19,9 @@ public abstract class Pokemon {
 	List<String> strengths = new ArrayList <String>();
 	int attackStatChange = 0;
 	
+	public Pokemon () {
+	
+	}
 	
 	public Pokemon (String name, int hP, String type) {
 		this.name = name;

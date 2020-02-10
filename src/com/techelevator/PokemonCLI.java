@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class PokemonCLI {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 		
 		Scanner scan = new Scanner(System.in);
 		Battle battle = new Battle();
@@ -29,10 +29,8 @@ public class PokemonCLI {
 		System.out.println(battle.whoGoesFirst());
 		
 		while (!battle.isOver) {
-			battle.battle();
-			if (battle.turn.length() > 0) {
-				System.out.println(battle.turn);
-			}
+			Thread.sleep(2000);
+			System.out.print(battle.pokemonTurn());
 		}
 		
 		System.out.println();

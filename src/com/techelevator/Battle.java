@@ -13,31 +13,28 @@ public class Battle {
 	private Pokemon pokemonGoingSecond;
 	public boolean isOver = false;
 	private Pokemon winner = pokemonGoingFirst;
-	public String turn = "";
+	private int turnCount = 1;
+	private Pokemon pokemonAttacking;
+	private Pokemon pokemonGettingAttacked;
 
 	public String createBattlePokemon(String input) {
 		String result = "";
+		Pokemon p = new Pokemon();
 		if (input.equals("B")) {
-			Bulbasaur newBulbasaur = new Bulbasaur();
-			chosenPokemon.add(newBulbasaur);
-			result = newBulbasaur.getName() + ", the " + newBulbasaur.getType() + " type pokemon was chosen!";
+			p = new Bulbasaur();
 		} else if (input.equals("C")) {
-			Charmander newCharmander = new Charmander();
-			chosenPokemon.add(newCharmander);
-			result = newCharmander.getName() + ", the " + newCharmander.getType() + " type pokemon was chosen!";
+			p = new Charmander();
 		} else if (input.equals("S")) {
-			Squirtle newSquirtle = new Squirtle();
-			chosenPokemon.add(newSquirtle);
-			result = newSquirtle.getName() + ", the " + newSquirtle.getType() + " type pokemon was chosen!";
+			p = new Squirtle();
 		} else if (input.equals("E")) {
-			Eevee newEevee = new Eevee();
-			chosenPokemon.add(newEevee);
-			result = newEevee.getName() + ", the " + newEevee.getType() + " type pokemon was chosen!";
+			p = new Eevee();
 		} else if (input.equals("P")) {
-			Pikachu newPikachu = new Pikachu();
-			chosenPokemon.add(newPikachu);
-			result = newPikachu.getName() + ", the " + newPikachu.getType() + " type pokemon was chosen!";
+			p = new Pikachu();	
 		}
+		
+		chosenPokemon.add(p);
+		result = p.getName() + ", the " + p.getType() + " type pokemon was chosen!";
+		
 		return result;
 	}
 
@@ -59,20 +56,25 @@ public class Battle {
 
 	public void battle() {
 		while (!isOver) {
-			turn += pokemonTurn(pokemonGoingFirst, pokemonGoingSecond);
-			if (!isOver) {
-				turn += pokemonTurn(pokemonGoingSecond, pokemonGoingFirst);
-			}
+			pokemonTurn();
 		}
 	}
 
-	private String pokemonTurn(Pokemon pokemonAttacking, Pokemon pokemonGettingAttacked) {
+	public String pokemonTurn() {
 		String result = "";
+		if (turnCount % 2 != 0) {
+			pokemonAttacking = pokemonGoingFirst;
+			pokemonGettingAttacked = pokemonGoingSecond;
+		} else {
+			pokemonAttacking = pokemonGoingSecond;
+			pokemonGettingAttacked = pokemonGoingFirst;
+		}
 		String moveUsed = pokemonAttacking.fight();
 		int moveDamage = pokemonAttacking.moveDamageMap.get(moveUsed);
 		result += "\n" + pokemonAttacking + " used " + moveUsed + "!";
 
 		if (usedStatChangingMove(pokemonAttacking, moveUsed)) {
+			turnCount++;
 			return doStatChangingMove(pokemonAttacking, pokemonGettingAttacked, moveUsed);
 		} else {
 			moveDamage = damageDelt(pokemonAttacking, pokemonGettingAttacked, moveDamage, moveUsed);
@@ -81,7 +83,8 @@ public class Battle {
 
 		updateAttackedPokemonHp(pokemonGettingAttacked, pokemonAttacking, moveDamage);
 		result += determineIfBattleIsOver(pokemonAttacking, pokemonGettingAttacked);
-
+		turnCount++;
+		
 		return result;
 	}
 
@@ -105,6 +108,7 @@ public class Battle {
 
 	private int damageDelt(Pokemon pokemonAttacking, Pokemon pokemonGettingAttacked, int moveDamage, String moveUsed) {
 		int result = moveDamage;
+		
 		if (pokemonAttacking.isSuperEffective(moveUsed, pokemonGettingAttacked) && pokemonAttacking.isCriticalHit()) {
 			result = (moveDamage + pokemonAttacking.getAttackStatChange()) * 3;
 		} else if (pokemonAttacking.isNotVeryEffective(moveUsed, pokemonGettingAttacked)
@@ -124,7 +128,7 @@ public class Battle {
 
 		return result;
 	}
-
+	
 	private String attackingMoveTurn(Pokemon pokemonAttacking, Pokemon pokemonGettingAttacked, String moveUsed,
 			int moveDamage) {
 		String result = "";
@@ -151,7 +155,7 @@ public class Battle {
 		String result = "";
 		if (pokemonGettingAttacked.gethP() <= 0) {
 			isOver = true;
-			result += "\n" + pokemonGettingAttacked + " has fainted!";
+			result += "\n" + pokemonGettingAttacked + " has fainted!\n";
 			winner = pokemonAttacking;
 		} else {
 			result += "\n" + pokemonGettingAttacked + " has " + pokemonGettingAttacked.gethP() + " Hp left.\n";
