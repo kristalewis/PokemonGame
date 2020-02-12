@@ -1,20 +1,16 @@
 package com.techelevator;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
-import java.util.concurrent.ArrayBlockingQueue;
+
 
 public class Pokemon {
 
 	private String name;
 	private int hP;
 	private String type;
-	String[] moves = new String[4];
-	Map<String, Integer> moveDamageMap = new HashMap<String, Integer>();
-	Map<String, String> moveTypeMap = new HashMap<String, String>();
+	List <Move> moves = new ArrayList<Move>();
 	List<String> weaknesses = new ArrayList <String>();
 	List<String> strengths = new ArrayList <String>();
 	int attackStatChange = 0;
@@ -53,24 +49,6 @@ public class Pokemon {
 		this.attackStatChange += attackStatChange;
 	}
 	
-	public void setMoves(String[] moves) {
-		for(int i = 0; i < 4; i++) {
-			this.moves[i] = moves[i];
-		}
-	}
-	
-	public void setMovesDamageMap(String[] moves, Integer[] moveValues) {
-		for(int i = 0; i < 4; i++) {
-			moveDamageMap.put(moves[i], moveValues[i]);
-		}	
-	}
-	
-	public void setMovesTypeMap(String[] moves, String[] moveTypes) {
-		for(int i = 0; i < 4; i++) {
-			moveTypeMap.put(moves[i], moveTypes[i]);
-		}	
-	}
-	
 	public void setWeaknesses(String[] weaknesses) {
 		for(int i = 0; i < weaknesses.length; i++) {
 			this.weaknesses.add(weaknesses[i]);
@@ -85,14 +63,10 @@ public class Pokemon {
 	
 	Random rand = new Random();
 	int randomMove;
-	public String fight() {
+	public Move pickMove() {
 		randomMove = rand.nextInt(4);
-		String movePicked = moves[randomMove];
+		Move movePicked = moves.get(randomMove);
 		return movePicked;
-	}
-	
-	public String[] getMoves() {
-		return moves;
 	}
 	
 	public List<String> getWeaknesses() {
@@ -103,54 +77,11 @@ public class Pokemon {
 		return strengths;
 	}
 	
-	public boolean usedDefenseLoweringMove(String move) {
-		boolean result = false;
-		if (move.equals("Tail Whip") || move.equals("Leer")) {
-			result = true;
+	public void createMoveList(String[] moveNames, String[] moveTypes, int[] moveValues) {
+		for(int i = 0; i < 4; i++) {
+			Move currentMove = new Move(moveNames[i], moveTypes[i], moveValues[i]);
+			moves.add(currentMove);
 		}
-		return result;
 	}
-	
-	public boolean usedAttackLoweringMove(String move) {
-		boolean result = false;
-		if (move.equals("Growl")) {
-			result = true;
-		}
-		return result;
-	}
-	
-	public boolean isCriticalHit() {
-		boolean result = false;
-		Random criticalHit = new Random();
-		if(criticalHit.nextInt(50) == 0) {
-			result = true;
-		}
-		return result;
-	}
-
-	public boolean isSuperEffective(String move, Pokemon foe) {
-		boolean result = false;
-		String moveType = moveTypeMap.get(move);
-		for(String type : foe.getWeaknesses()) {
-			if(moveType.equals(type)) {
-				result = true;
-				break;
-			}
-		}
-		return result;
-	}
-
-	public boolean isNotVeryEffective(String move, Pokemon foe) {
-		boolean result = false;
-		String moveType = moveTypeMap.get(move);
-		for(String type : foe.getStrengths()) {
-			if(moveType.equals(type)) {
-				result = true;
-				break;
-			}
-		}
-		return result;
-	}
-	
 	
 }

@@ -4,18 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import com.sun.jndi.url.dns.dnsURLContext;
-
 public class Battle {
 
 	private List<Pokemon> chosenPokemon = new ArrayList<Pokemon>();
 	private Pokemon pokemonGoingFirst;
 	private Pokemon pokemonGoingSecond;
-	public boolean isOver = false;
+	private boolean isOver = false;
 	private Pokemon winner = pokemonGoingFirst;
 	private int turnCount = 1;
 	private Pokemon pokemonAttacking;
 	private Pokemon pokemonGettingAttacked;
+	private Move moveUsed;
+	private int moveDamage = 0;
 
 	public String createBattlePokemon(String input) {
 		String result = "";
@@ -30,14 +30,15 @@ public class Battle {
 			p = new Eevee();
 		} else if (input.equals("P")) {
 			p = new Pikachu();	
-		}
-		
-		chosenPokemon.add(p);
-		result = p.getName() + ", the " + p.getType() + " type pokemon was chosen!";
+		} 
+		if (p.getName() != null) {
+			chosenPokemon.add(p);
+			result = p.getName() + ", the " + p.getType() + " type pokemon was chosen!";
+		} 
 		
 		return result;
 	}
-
+ 
 	public String announceBattle() {
 		return "This battle is between " + chosenPokemon.get(0) + " and " + chosenPokemon.get(1) + "!";
 	}
@@ -59,6 +60,10 @@ public class Battle {
 			pokemonTurn();
 		}
 	}
+	
+	public boolean isBattleOver() {
+		return isOver;
+	}
 
 	public String pokemonTurn() {
 		String result = "";
@@ -69,55 +74,52 @@ public class Battle {
 			pokemonAttacking = pokemonGoingSecond;
 			pokemonGettingAttacked = pokemonGoingFirst;
 		}
-		String moveUsed = pokemonAttacking.fight();
-		int moveDamage = pokemonAttacking.moveDamageMap.get(moveUsed);
-		result += "\n" + pokemonAttacking + " used " + moveUsed + "!";
+		moveUsed = pokemonAttacking.pickMove();
+		moveDamage = moveUsed.getDamage();
+		result += "\n" + pokemonAttacking + " used " + moveUsed.getName() + "!";
 
-		if (usedStatChangingMove(pokemonAttacking, moveUsed)) {
+		if (moveUsed.getDamage() == 0) {
 			turnCount++;
-			return doStatChangingMove(pokemonAttacking, pokemonGettingAttacked, moveUsed);
+			return doStatChangingMove(moveUsed);
 		} else {
-			moveDamage = damageDelt(pokemonAttacking, pokemonGettingAttacked, moveDamage, moveUsed);
-			result += attackingMoveTurn(pokemonAttacking, pokemonGettingAttacked, moveUsed, moveDamage);
+			moveDamage = damageDelt(moveUsed);
+			result += attackingMoveTurn(moveUsed);
 		}
 
-		updateAttackedPokemonHp(pokemonGettingAttacked, pokemonAttacking, moveDamage);
-		result += determineIfBattleIsOver(pokemonAttacking, pokemonGettingAttacked);
+		updateAttackedPokemonHp();
+		result += determineIfBattleIsOver();
 		turnCount++;
 		
 		return result;
 	}
 
-	private boolean usedStatChangingMove(Pokemon pokemonAttacking, String moveUsed) {
-		return pokemonAttacking.usedDefenseLoweringMove(moveUsed) || pokemonAttacking.usedAttackLoweringMove(moveUsed);
-	}
-
-	private String doStatChangingMove(Pokemon pokemonAttacking, Pokemon pokemonGettingAttacked, String moveUsed) {
+	private String doStatChangingMove(Move moveUsed) {
 		String result = "";
-		if (pokemonAttacking.usedDefenseLoweringMove(moveUsed)) {
-			result += "\n" + pokemonAttacking + " used " + moveUsed + "!";
+		if (moveUsed.isDefenseLoweringMove()) {
+			result += "\n" + pokemonAttacking + " used " + moveUsed.getName() + "!";
 			result += "\n" + pokemonGettingAttacked + "'s defense fell.\n";
 			pokemonAttacking.setAttackStatChange(1);
-		} else if (pokemonAttacking.usedAttackLoweringMove(moveUsed)) {
-			result += "\n" + pokemonAttacking + " used " + moveUsed + "!";
+		} else if (moveUsed.isAttackLoweringMove()) {
+			result += "\n" + pokemonAttacking + " used " + moveUsed.getName() + "!";
 			result += "\n" + pokemonGettingAttacked + "'s attack fell.\n";
 			pokemonGettingAttacked.setAttackStatChange(-1);
 		}
 		return result;
 	}
 
-	private int damageDelt(Pokemon pokemonAttacking, Pokemon pokemonGettingAttacked, int moveDamage, String moveUsed) {
+	private int damageDelt(Move moveUsed) {
 		int result = moveDamage;
 		
-		if (pokemonAttacking.isSuperEffective(moveUsed, pokemonGettingAttacked) && pokemonAttacking.isCriticalHit()) {
+		if (moveUsed.isSuperEffective(pokemonGettingAttacked) 
+				&& moveUsed.isCriticalHit()) {
 			result = (moveDamage + pokemonAttacking.getAttackStatChange()) * 3;
-		} else if (pokemonAttacking.isNotVeryEffective(moveUsed, pokemonGettingAttacked)
-				&& pokemonAttacking.isCriticalHit()) {
+		} else if (moveUsed.isNotVeryEffective(pokemonGettingAttacked)
+				&& moveUsed.isCriticalHit()) {
 			result = (moveDamage + pokemonAttacking.getAttackStatChange());
-		} else if (pokemonAttacking.isSuperEffective(moveUsed, pokemonGettingAttacked)
-				|| pokemonAttacking.isCriticalHit()) {
+		} else if (moveUsed.isSuperEffective(pokemonGettingAttacked)
+				|| moveUsed.isCriticalHit()) {
 			result = (moveDamage + pokemonAttacking.getAttackStatChange()) * 2;
-		} else if (pokemonAttacking.isNotVeryEffective(moveUsed, pokemonGettingAttacked)) {
+		} else if (moveUsed.isNotVeryEffective(pokemonGettingAttacked)) {
 			result = ((moveDamage + pokemonAttacking.getAttackStatChange()) / 2);
 		} else {
 			result = moveDamage + pokemonAttacking.getAttackStatChange();
@@ -129,16 +131,15 @@ public class Battle {
 		return result;
 	}
 	
-	private String attackingMoveTurn(Pokemon pokemonAttacking, Pokemon pokemonGettingAttacked, String moveUsed,
-			int moveDamage) {
+	private String attackingMoveTurn(Move moveUsed) {
 		String result = "";
-		if (pokemonAttacking.isSuperEffective(moveUsed, pokemonGettingAttacked)) {
+		if (moveUsed.isSuperEffective(pokemonGettingAttacked)) {
 			result += "\nIt's super effective! ";
 		}
-		if (pokemonAttacking.isNotVeryEffective(moveUsed, pokemonGettingAttacked)) {
+		if (moveUsed.isNotVeryEffective(pokemonGettingAttacked)) {
 			result += "\nIt's not very effective.... ";
 		}
-		if (pokemonAttacking.isCriticalHit()) {
+		if (moveUsed.isCriticalHit()) {
 			result += "\nCritical hit! ";
 		}
 
@@ -146,12 +147,12 @@ public class Battle {
 		return result;
 	}
 
-	private void updateAttackedPokemonHp(Pokemon pokemonGettingAttacked, Pokemon pokemonAttacking, int moveDamage) {
+	private void updateAttackedPokemonHp() {
 		int currentHp = pokemonGettingAttacked.gethP() - (moveDamage);
 		pokemonGettingAttacked.sethP(currentHp);
 	}
 
-	private String determineIfBattleIsOver(Pokemon pokemonAttacking, Pokemon pokemonGettingAttacked) {
+	private String determineIfBattleIsOver() {
 		String result = "";
 		if (pokemonGettingAttacked.gethP() <= 0) {
 			isOver = true;
