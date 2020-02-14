@@ -16,9 +16,9 @@ public class PokemonCLI {
 			String announcement = battle.createBattlePokemon(input);
 			if (announcement.equals("")) {
 				i--;
-				Thread.sleep(1000);
+				Thread.sleep(500);
 				System.out.println("That's not a valid pokemon, choose again!");
-				Thread.sleep(1000);
+				Thread.sleep(500);
 			} else {
 				Thread.sleep(1000);
 				System.out.println(announcement);
@@ -34,7 +34,7 @@ public class PokemonCLI {
 		System.out.println(battle.announceBattle());
 		System.out.println();
 		
-		Thread.sleep(3000);
+		Thread.sleep(1500);
 		System.out.println(battle.whoGoesFirst());
 		
 		while (!battle.isBattleOver()) {

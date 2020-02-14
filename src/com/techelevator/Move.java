@@ -8,7 +8,6 @@ public class Move {
 	private String elementType;
 	private int damage;
 	
-
 	public String getName() {
 		return name;
 	}
@@ -70,5 +69,22 @@ public class Move {
 		return this.name.equals("Tail Whip") || this.name.equals("Leer");
 	}
 
+	public boolean attackFailed() {
+		boolean result = false;
+		Random attackFailed = new Random();
+		if (attackFailed.nextInt(20) == 0) {
+			result = true;
+		}
+		return result;
+	}
+	
+	public boolean attackMissed() {
+		boolean result = false;
+		Random attackMissed = new Random();
+		if (attackMissed.nextInt(20) == 0) {
+			result = true;
+		}
+		return result;
+	}
 
 }

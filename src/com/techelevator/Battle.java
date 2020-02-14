@@ -16,6 +16,7 @@ public class Battle {
 	private Pokemon pokemonGettingAttacked;
 	private Move moveUsed;
 	private int moveDamage = 0;
+	private boolean attackHit;
 
 	public String createBattlePokemon(String input) {
 		String result = "";
@@ -80,14 +81,18 @@ public class Battle {
 
 		if (moveUsed.getDamage() == 0) {
 			turnCount++;
-			return doStatChangingMove(moveUsed);
+			result += doStatChangingMove(moveUsed);
+			return result;
 		} else {
 			moveDamage = damageDelt(moveUsed);
 			result += attackingMoveTurn(moveUsed);
 		}
 
-		updateAttackedPokemonHp();
-		result += determineIfBattleIsOver();
+		if (attackHit) {
+			updateAttackedPokemonHp();
+			result += determineIfBattleIsOver();
+		}
+		
 		turnCount++;
 		
 		return result;
@@ -95,14 +100,16 @@ public class Battle {
 
 	private String doStatChangingMove(Move moveUsed) {
 		String result = "";
-		if (moveUsed.isDefenseLoweringMove()) {
-			result += "\n" + pokemonAttacking + " used " + moveUsed.getName() + "!";
-			result += "\n" + pokemonGettingAttacked + "'s defense fell.\n";
-			pokemonAttacking.setAttackStatChange(1);
-		} else if (moveUsed.isAttackLoweringMove()) {
-			result += "\n" + pokemonAttacking + " used " + moveUsed.getName() + "!";
-			result += "\n" + pokemonGettingAttacked + "'s attack fell.\n";
-			pokemonGettingAttacked.setAttackStatChange(-1);
+		if (moveUsed.attackFailed()) {
+			result += "\nBut it failed.\n";
+		} else {
+			if (moveUsed.isDefenseLoweringMove()) {
+				result += "\n" + pokemonGettingAttacked + "'s defense fell.\n";
+				pokemonAttacking.setAttackStatChange(1);
+			} else if (moveUsed.isAttackLoweringMove()) {
+				result += "\n" + pokemonGettingAttacked + "'s attack fell.\n";
+				pokemonGettingAttacked.setAttackStatChange(-1);
+			}
 		}
 		return result;
 	}
@@ -112,13 +119,13 @@ public class Battle {
 		
 		if (moveUsed.isSuperEffective(pokemonGettingAttacked) 
 				&& moveUsed.isCriticalHit()) {
-			result = (moveDamage + pokemonAttacking.getAttackStatChange()) * 3;
+			result = ((moveDamage + pokemonAttacking.getAttackStatChange()) * 3);
 		} else if (moveUsed.isNotVeryEffective(pokemonGettingAttacked)
 				&& moveUsed.isCriticalHit()) {
 			result = (moveDamage + pokemonAttacking.getAttackStatChange());
 		} else if (moveUsed.isSuperEffective(pokemonGettingAttacked)
 				|| moveUsed.isCriticalHit()) {
-			result = (moveDamage + pokemonAttacking.getAttackStatChange()) * 2;
+			result = ((moveDamage + pokemonAttacking.getAttackStatChange()) * 2);
 		} else if (moveUsed.isNotVeryEffective(pokemonGettingAttacked)) {
 			result = ((moveDamage + pokemonAttacking.getAttackStatChange()) / 2);
 		} else {
@@ -133,17 +140,24 @@ public class Battle {
 	
 	private String attackingMoveTurn(Move moveUsed) {
 		String result = "";
-		if (moveUsed.isSuperEffective(pokemonGettingAttacked)) {
-			result += "\nIt's super effective! ";
-		}
-		if (moveUsed.isNotVeryEffective(pokemonGettingAttacked)) {
-			result += "\nIt's not very effective.... ";
-		}
-		if (moveUsed.isCriticalHit()) {
-			result += "\nCritical hit! ";
-		}
-
+		if (moveUsed.attackMissed()) {
+			attackHit = false;
+			result += "\n" + pokemonAttacking + "'s attack missed!\n";
+		} else {
+			attackHit = true;
+			if (moveUsed.isSuperEffective(pokemonGettingAttacked)) {
+				result += "\nIt's super effective! ";
+			}
+			if (moveUsed.isNotVeryEffective(pokemonGettingAttacked)) {
+				result += "\nIt's not very effective.... ";
+			}
+			if (moveUsed.isCriticalHit()) {
+				result += "\nCritical hit! ";
+			}
+			
 		result += "\nIt did " + moveDamage + " damage!";
+		}
+		
 		return result;
 	}
 
@@ -158,7 +172,7 @@ public class Battle {
 			isOver = true;
 			result += "\n" + pokemonGettingAttacked + " has fainted!\n";
 			winner = pokemonAttacking;
-		} else {
+		} else if (attackHit){
 			result += "\n" + pokemonGettingAttacked + " has " + pokemonGettingAttacked.gethP() + " Hp left.\n";
 		}
 		return result;
