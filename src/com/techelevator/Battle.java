@@ -1,12 +1,15 @@
 package com.techelevator;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 public class Battle {
 
 	private List<Pokemon> chosenPokemon = new ArrayList<Pokemon>();
+	private Map<Integer, String> possiblePokemon = new HashMap<Integer, String>();
 	private Pokemon pokemonGoingFirst;
 	private Pokemon pokemonGoingSecond;
 	private boolean isOver = false;
@@ -17,27 +20,69 @@ public class Battle {
 	private Move moveUsed;
 	private int moveDamage = 0;
 	private boolean attackHit;
+	private int typeOfBattle;
+	private static final int COM_VS_COM = 1;
+	private static final int TRAINER_VS_COM = 2;
+	private static final int TRAINER_VS_TRAINER = 3;
+	
 
 	public String createBattlePokemon(String input) {
 		String result = "";
-		Pokemon p = new Pokemon();
+		Pokemon pokemon = new Pokemon();
 		if (input.equals("B")) {
-			p = new Bulbasaur();
+			pokemon = new Bulbasaur();
 		} else if (input.equals("C")) {
-			p = new Charmander();
+			pokemon = new Charmander();
 		} else if (input.equals("S")) {
-			p = new Squirtle();
+			pokemon = new Squirtle();
 		} else if (input.equals("E")) {
-			p = new Eevee();
+			pokemon = new Eevee();
 		} else if (input.equals("P")) {
-			p = new Pikachu();	
-		} 
-		if (p.getName() != null) {
-			chosenPokemon.add(p);
-			result = p.getName() + ", the " + p.getType() + " type pokemon was chosen!";
+			pokemon = new Pikachu();	
+		}
+		
+		setIfPokemonHasTrainer(pokemon);
+		
+		if (pokemon.getName() != null) {
+			chosenPokemon.add(pokemon);
+			result = pokemon.getName() + ", the " + pokemon.getType() + " type pokemon was chosen!";
 		} 
 		
 		return result;
+	}
+	
+	public void setTypeOfBattle(int battleType) {
+		this.typeOfBattle = battleType;
+	}
+	
+	private void setIfPokemonHasTrainer(Pokemon pokemon) {
+		if (typeOfBattle == COM_VS_COM) {
+			pokemon.setHasTrainer(false);
+		} else if (typeOfBattle == TRAINER_VS_TRAINER) {
+			pokemon.setHasTrainer(true);
+			if(chosenPokemon.size() == 0) {
+				pokemon.setTrainer(1);
+			} else {
+				pokemon.setTrainer(2);
+			}
+		} else if (typeOfBattle == TRAINER_VS_COM && chosenPokemon.size() == 0) {
+			pokemon.setHasTrainer(true);
+		}
+	}
+	
+	private void generatePossiblePokemonMap() {
+		possiblePokemon.put(0, "B");
+		possiblePokemon.put(1, "C");
+		possiblePokemon.put(2, "S");
+		possiblePokemon.put(3, "E");
+		possiblePokemon.put(4, "P");
+	}
+	
+	public String chooseComPokemon() {
+		generatePossiblePokemonMap();
+		Random rand = new Random();
+		int pokemonChosen = rand.nextInt(4);
+		return createBattlePokemon(possiblePokemon.get(pokemonChosen));
 	}
  
 	public String announceBattle() {
@@ -45,29 +90,29 @@ public class Battle {
 	}
 
 	public String whoGoesFirst() {
+		String result = "";
 		Random rand = new Random();
 		int goingFirst = rand.nextInt(2);
 		setWhoIsGoingFirst(goingFirst);
-		return chosenPokemon.get(goingFirst) + " will go first." + "\nLet the battle begin!";
+		if (pokemonGoingFirst.hasTrainer() && pokemonGoingSecond.hasTrainer()) {
+			result += "Trainer " + pokemonGoingFirst.getTrainer();
+		} else {
+			result += chosenPokemon.get(goingFirst);
+		}
+		result += " will go first." + "\nLet the battle begin!\n";
+		return result;
 	}
 
 	private void setWhoIsGoingFirst(int goingFirst) {
 		pokemonGoingFirst = chosenPokemon.get(goingFirst);
 		pokemonGoingSecond = chosenPokemon.get((goingFirst + 1) % 2);
 	}
-
-	public void battle() {
-		while (!isOver) {
-			pokemonTurn();
-		}
-	}
 	
 	public boolean isBattleOver() {
 		return isOver;
 	}
-
-	public String pokemonTurn() {
-		String result = "";
+	
+	public void setWhoIsAttacking() {
 		if (turnCount % 2 != 0) {
 			pokemonAttacking = pokemonGoingFirst;
 			pokemonGettingAttacked = pokemonGoingSecond;
@@ -75,9 +120,35 @@ public class Battle {
 			pokemonAttacking = pokemonGoingSecond;
 			pokemonGettingAttacked = pokemonGoingFirst;
 		}
-		moveUsed = pokemonAttacking.pickMove();
+	}
+	
+	public String displayMoves() {
+		String result = "";
+		if (pokemonAttacking.getName().equals(pokemonGettingAttacked.getName())) {
+			result += "\nTrainer " + pokemonAttacking.getTrainer() + ", w";
+		} else {
+			result += "\nW";
+		}
+		result += "hat move will " + pokemonAttacking + " do?\n";
+		if (pokemonAttacking.hasTrainer()) {
+			for (int i = 0; i < 4; i++) { 
+				result += (i + 1) + ". ";
+				result += pokemonAttacking.moves.get(i).getName() + "\n";
+			}
+		}
+		
+		return result;
+	}
+
+	public String comPokemonTurn() {
+		return pokemonTurn(pokemonAttacking.pickMove());
+	}
+	
+	public String pokemonTurn(int moveChoice) {
+		String result = "";
+		moveUsed = pokemonAttacking.moves.get(moveChoice);
 		moveDamage = moveUsed.getDamage();
-		result += "\n" + pokemonAttacking + " used " + moveUsed.getName() + "!";
+		result += pokemonAttacking + " used " + moveUsed.getName() + "!";
 
 		if (moveUsed.getDamage() == 0) {
 			turnCount++;
@@ -116,7 +187,7 @@ public class Battle {
 
 	private int damageDelt(Move moveUsed) {
 		int result = moveDamage;
-		
+		moveUsed.rollForCriticalHit();
 		if (moveUsed.isSuperEffective(pokemonGettingAttacked) 
 				&& moveUsed.isCriticalHit()) {
 			result = ((moveDamage + pokemonAttacking.getAttackStatChange()) * 3);
@@ -180,6 +251,10 @@ public class Battle {
 
 	public String getwinner() {
 		return "The battle is over! " + winner + " has won!\nCongratulations " + winner + "!";
+	}
+	
+	public Pokemon getPokemonAttacking() {
+		return pokemonAttacking;
 	}
 
 	public List<Pokemon> printList() {

@@ -7,6 +7,7 @@ public class Move {
 	private String name;
 	private String elementType;
 	private int damage;
+	private boolean isCriticalHit = false;
 	
 	public String getName() {
 		return name;
@@ -53,12 +54,16 @@ public class Move {
 	}
 	
 	public boolean isCriticalHit() {
+		return this.isCriticalHit;
+	}
+	
+	public void rollForCriticalHit() {
 		boolean result = false;
 		Random criticalHit = new Random();
-		if (criticalHit.nextInt(45) == 0) {
+		if (criticalHit.nextInt(40) == 0) {
 			result = true;
 		}
-		return result;
+		this.isCriticalHit = result;
 	}
 	
 	public boolean isAttackLoweringMove() {
@@ -72,7 +77,7 @@ public class Move {
 	public boolean attackFailed() {
 		boolean result = false;
 		Random attackFailed = new Random();
-		if (attackFailed.nextInt(20) == 0) {
+		if (attackFailed.nextInt(15) == 0) {
 			result = true;
 		}
 		return result;

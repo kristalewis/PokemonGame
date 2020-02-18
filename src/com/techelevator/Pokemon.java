@@ -11,12 +11,14 @@ public class Pokemon {
 	private int hP;
 	private String type;
 	List <Move> moves = new ArrayList<Move>();
-	List<String> weaknesses = new ArrayList <String>();
-	List<String> strengths = new ArrayList <String>();
-	int attackStatChange = 0;
+	private List<String> weaknesses = new ArrayList <String>();
+	private List<String> strengths = new ArrayList <String>();
+	private int attackStatChange = 0;
+	private boolean hasTrainer = false;
+	private int trainer;
+	
 	
 	public Pokemon () {
-	
 	}
 	
 	public Pokemon (String name, int hP, String type) {
@@ -41,6 +43,21 @@ public class Pokemon {
 		return type;
 	}
 	
+	public void setHasTrainer (boolean isHuman) {
+		this.hasTrainer = isHuman;
+	}
+	
+	public boolean hasTrainer () {
+		return this.hasTrainer;
+	}
+	public void setTrainer(int trainer) {
+		this.trainer = trainer;
+	}
+	
+	public int getTrainer() {
+		return trainer;
+	}
+	
 	public int getAttackStatChange() {
 		return attackStatChange;
 	}
@@ -63,10 +80,8 @@ public class Pokemon {
 	
 	Random rand = new Random();
 	int randomMove;
-	public Move pickMove() {
-		randomMove = rand.nextInt(4);
-		Move movePicked = moves.get(randomMove);
-		return movePicked;
+	public int pickMove() {
+		return rand.nextInt(4);
 	}
 	
 	public List<String> getWeaknesses() {
@@ -83,5 +98,7 @@ public class Pokemon {
 			moves.add(currentMove);
 		}
 	}
+	
+	
 	
 }
