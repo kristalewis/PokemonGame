@@ -50,11 +50,11 @@ public class Pokemon {
 	public boolean hasTrainer () {
 		return this.hasTrainer;
 	}
-	public void setTrainer(int trainer) {
+	public void setTrainerOrCom(int trainer) {
 		this.trainer = trainer;
 	}
 	
-	public int getTrainer() {
+	public int getTrainerOrCom() {
 		return trainer;
 	}
 	
