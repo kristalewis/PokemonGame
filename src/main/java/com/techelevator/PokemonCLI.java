@@ -2,6 +2,10 @@ package com.techelevator;
 
 import java.util.Scanner;
 
+import org.apache.commons.dbcp.BasicDataSource;
+
+import com.techelevator.pokemon.model.Battle;
+
 public class PokemonCLI {
 
 	private Scanner scan;
@@ -24,6 +28,18 @@ public class PokemonCLI {
 		scan = new Scanner(System.in);
 		battle = new Battle();
 		battleTypeHasBeenChosen = false;
+		
+		BasicDataSource 
+		
+//		BasicDataSource dataSource = new BasicDataSource();
+//		dataSource.setUrl("jdbc:postgresql://localhost:5432/campground");
+//		dataSource.setUsername("postgres");
+//		dataSource.setPassword("postgres1");
+		
+//		campgroundDao = new JDBCCampgroundDAO(dataSource);
+//		siteDao = new JDBCSiteDAO(dataSource);
+//		reservationDao = new JDBCReservationDAO(dataSource);
+//		parkDao = new JDBCParkDAO(dataSource);	
 	}
 	
 	private void run() {

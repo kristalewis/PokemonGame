@@ -1,4 +1,4 @@
-package com.techelevator;
+package com.techelevator.pokemon.model;
 
 import java.util.Random;
 
@@ -19,10 +19,6 @@ public class Move {
 
 	public int getDamage() {
 		return damage;
-	}
-
-	public void setDamage(int damage) {
-		this.damage = damage;
 	}
 
 	public Move(String name, String elementType, int damage) {
@@ -60,7 +56,7 @@ public class Move {
 	public void rollForCriticalHit() {
 		boolean result = false;
 		Random criticalHit = new Random();
-		if (criticalHit.nextInt(40) == 0) {
+		if (criticalHit.nextInt(35) == 0) {
 			result = true;
 		}
 		this.isCriticalHit = result;

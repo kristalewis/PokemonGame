@@ -1,4 +1,4 @@
-package com.techelevator;
+package com.techelevator.pokemon.model;
 
 import java.util.ArrayList;
 import java.util.List;

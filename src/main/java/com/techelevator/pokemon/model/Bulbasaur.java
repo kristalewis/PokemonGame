@@ -1,4 +1,4 @@
-package com.techelevator;
+package com.techelevator.pokemon.model;
 
 public class Bulbasaur extends Pokemon {
 
