@@ -96,12 +96,24 @@ public class Move {
 		this.isCriticalHit = result;
 	}
 	
+	public boolean isStatChangingMove() {
+		return isAttackLoweringMove() || isDefenseLoweringMove() || isAccuracyLoweringMove();
+	}
+	
 	public boolean isAttackLoweringMove() {
-		return this.name.equals("Growl");
+		return this.moveType.equals("attack lowering");
 	}
 	
 	public boolean isDefenseLoweringMove() {
-		return this.name.equals("Tail Whip") || this.name.equals("Leer");
+		return this.moveType.equals("defense lowering");
+	}
+	
+	public boolean isAccuracyLoweringMove() {
+		return this.moveType.equals("accuracy lowering");
+	}
+	
+	public boolean isNoEffectMove() {
+		return this.moveType.equals("no effect");
 	}
 
 	public boolean attackFailed() {
@@ -113,10 +125,14 @@ public class Move {
 		return result;
 	}
 	
-	public boolean attackMissed() {
+	public boolean attackMissed(int accuracyStat) {
 		boolean result = false;
 		Random attackMissed = new Random();
-		if (attackMissed.nextInt(20) == 0) {
+		if (accuracyStat < -4) {
+			accuracyStat = -4;
+		}
+		int attackMissingChance = 22 + (accuracyStat * 5);
+		if (attackMissed.nextInt(attackMissingChance) == 0) {
 			result = true;
 		}
 		return result;

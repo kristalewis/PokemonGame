@@ -15,6 +15,7 @@ public class Pokemon {
 	private List<String> weaknesses = new ArrayList <String>();
 	private List<String> strengths = new ArrayList <String>();
 	private int attackStatChange = 0;
+	private int accuracyStat = 0;
 	private boolean hasTrainer = false;
 	private int trainer;
 	
@@ -50,6 +51,14 @@ public class Pokemon {
 	
 	public void sethP(int hP) {
 		this.hP = hP;
+	}
+	
+	public void setAccuracyStat(int accuracyStat) {
+		this.accuracyStat += accuracyStat;
+	}
+	
+	public int getAccuracyStat() {
+		return accuracyStat;
 	}
 	
 	public String getType() {

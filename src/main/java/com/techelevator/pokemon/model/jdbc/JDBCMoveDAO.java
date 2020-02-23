@@ -32,10 +32,11 @@ public class JDBCMoveDAO implements MoveDAO {
 	@Override 
 	public List<Move> getPokemonMoves(Pokemon pokemon) {
 		List<Move> moves = new ArrayList<Move>();
-		String sql = "SELECT move.move_id, move_name, move_element, move_type, base_damage " +
+		String sql = "SELECT move.move_id, move_name, move_element, movetype.move_type, base_damage " +
 					 "FROM pokemon " +
 					 "JOIN pokemonmove ON pokemon.pokemon_id = pokemonmove.pokemon_id " +
 					 "JOIN move ON pokemonmove.move_id = move.move_id " +
+					 "JOIN movetype ON move.move_type = movetype.move_type_id " +
 					 "WHERE pokemon.pokemon_id = ?;";
 		SqlRowSet results = jdbcTemplate.queryForRowSet(sql, pokemon.getPokemonId());
 		while(results.next()) {

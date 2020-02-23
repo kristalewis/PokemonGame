@@ -125,10 +125,12 @@ public class Battle {
 			 result += "Com " + pokemonAttacking.getTrainerOrCom() + "'s ";
 		}
 		result += pokemonAttacking.getName() + " used " + moveUsed.getName() + "!";
-		if (moveUsed.getDamage() == 0) {
+		if (moveUsed.isStatChangingMove()) {
 			turnCount++;
 			result += doStatChangingMove(moveUsed);
 			return result;
+		} else if (moveUsed.isNoEffectMove()) {
+			result += "\nBut it had no effect.\n";
 		} else {
 			moveDamage = damageDelt(moveUsed);
 			result += attackingMoveTurn(moveUsed);
@@ -138,7 +140,6 @@ public class Battle {
 			updateAttackedPokemonHp();
 			result += determineIfBattleIsOver();
 		}
-		
 		turnCount++;
 		
 		return result;
@@ -155,7 +156,10 @@ public class Battle {
 			} else if (moveUsed.isAttackLoweringMove()) {
 				result += "\n" + pokemonGettingAttacked.getName() + "'s attack fell.\n";
 				pokemonGettingAttacked.setAttackStatChange(-1);
-			}
+			} else if (moveUsed.isAccuracyLoweringMove()) {
+				result += "\n" + pokemonGettingAttacked.getName() + "'s accuracy fell.\n";
+				pokemonGettingAttacked.setAccuracyStat(-1);
+			} 
 		}
 		return result;
 	}
@@ -186,7 +190,7 @@ public class Battle {
 	
 	private String attackingMoveTurn(Move moveUsed) {
 		String result = "";
-		if (moveUsed.attackMissed()) {
+		if (moveUsed.attackMissed(pokemonAttacking.getAccuracyStat())) {
 			attackHit = false;
 			result += "\n" + pokemonAttacking.getName() + "'s attack missed!\n";
 		} else {

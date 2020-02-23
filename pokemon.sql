@@ -13,14 +13,15 @@ CREATE TABLE element (
      element_name varchar NOT NULL,
      CONSTRAINT pk_element_id PRIMARY KEY (element_id),
      CONSTRAINT check_element_name CHECK (element_name IN ('normal', 'fire', 'water', 'grass', 'electric',
-        'flying', 'bug', 'ice', 'rock', 'ground', 'fighting', 'grass/poison'))
+        'normal/flying', 'bug', 'ice', 'rock', 'ground', 'fighting', 'grass/poison', 'flying'))
 );
 
 CREATE TABLE movetype (
      move_type_id serial NOT NULL,
      move_type varchar NOT NULL,
      CONSTRAINT pk_move_type_id PRIMARY KEY (move_type_id),
-     CONSTRAINT check_move_type CHECK (move_type IN ('damage dealing', 'attack lowering', 'defense lowering'))
+     CONSTRAINT check_move_type CHECK (move_type IN ('damage dealing', 'attack lowering', 
+                                        'defense lowering', 'accuracy lowering', 'no effect'))
 );
 
 CREATE TABLE move (
@@ -85,6 +86,7 @@ INSERT INTO element (element_name) VALUES ('bug');
 INSERT INTO element (element_name) VALUES ('ground');
 INSERT INTO element (element_name) VALUES ('rock');
 INSERT INTO element (element_name) VALUES ('fighting');
+INSERT INTO element (element_name) VALUES ('normal/flying')
 
 SELECT * FROM element;
 
@@ -94,11 +96,13 @@ SELECT * FROM element;
 INSERT INTO movetype (move_type) VALUES ('damage dealing');
 INSERT INTO movetype (move_type) VALUES ('attack lowering');
 INSERT INTO movetype (move_type) VALUES ('defense lowering');
+INSERT INTO movetype (move_type) VALUES ('accuracy lowering');
+INSERT INTO movetype (move_type) VALUES ('no effect');
 
 SELECT * FROM move;
 
 
--- Creating the moves that Bulbasaur, Squirtle, Charmander, Eevee, and Pikachu use
+-- Creating the moves that Bulbasaur, Squirtle, Charmander, Eevee, Pikachu and Pidgey use
 
 INSERT INTO move (move_name, move_element, move_type, base_damage)
 VALUES ('Tackle', (SELECT element_id FROM element WHERE element_name = 'normal'), 
@@ -148,12 +152,24 @@ INSERT INTO move (move_name, move_element, move_type, base_damage)
 VALUES ('Thundershock', (SELECT element_id FROM element WHERE element_name = 'electric'), 
         (SELECT move_type_id FROM movetype WHERE move_type = 'damage dealing'), 7);
 
+INSERT INTO move (move_name, move_element, move_type, base_damage)
+VALUES ('Gust', (SELECT element_id FROM element WHERE element_name = 'flying'), 
+        (SELECT move_type_id FROM movetype WHERE move_type = 'damage dealing'), 6);
+
+INSERT INTO move (move_name, move_element, move_type, base_damage)
+VALUES ('Sand Attack', (SELECT element_id FROM element WHERE element_name = 'ground'), 
+        (SELECT move_type_id FROM movetype WHERE move_type = 'accuracy lowering'), 0);
+
+INSERT INTO move (move_name, move_element, move_type, base_damage)
+VALUES ('Whirlwind', (SELECT element_id FROM element WHERE element_name = 'flying'), 
+        (SELECT move_type_id FROM movetype WHERE move_type = 'no effect'), 0);
+
 SELECT * FROM move;
 
 
 
 
--- Creating the pokemon (Bulbasaur, Squirtle, Charmander, Eevee, and Pikachu)
+-- Creating the pokemon (Bulbasaur, Squirtle, Charmander, Eevee, Pikachu and Pidgey)
 
 INSERT INTO pokemon (pokemon_name, hP, pokemon_type)
 VALUES ('Bulbasaur', 24, (SELECT element_id FROM element WHERE element_name  = 'grass/poison'));
@@ -169,6 +185,9 @@ VALUES ('Eevee', 24, (SELECT element_id FROM element WHERE element_name = 'norma
 
 INSERT INTO pokemon (pokemon_name, hP, pokemon_type)
 VALUES ('Pikachu', 23, (SELECT element_id FROM element WHERE element_name = 'electric'));
+
+INSERT INTO pokemon (pokemon_name, hP, pokemon_type)
+VALUES ('Pidgey', 22, (SELECT element_id FROM element WHERE element_name = 'normal/flying'));
 
 SELECT * FROM pokemon;
 
@@ -266,6 +285,23 @@ INSERT INTO pokemonmove (pokemon_id, move_id)
 VALUES ((SELECT pokemon_id FROM pokemon WHERE pokemon_name = 'Pikachu'),
         (SELECT move_id FROM move WHERE move_name  = 'Quick Attack')); 
 
+-- Making Pidgey Moves
+INSERT INTO pokemonmove (pokemon_id, move_id)
+VALUES ((SELECT pokemon_id FROM pokemon WHERE pokemon_name = 'Pidgey'),
+        (SELECT move_id FROM move WHERE move_name  = 'Gust')); 
+
+INSERT INTO pokemonmove (pokemon_id, move_id)
+VALUES ((SELECT pokemon_id FROM pokemon WHERE pokemon_name = 'Pidgey'),
+        (SELECT move_id FROM move WHERE move_name  = 'Sand Attack')); 
+
+INSERT INTO pokemonmove (pokemon_id, move_id)
+VALUES ((SELECT pokemon_id FROM pokemon WHERE pokemon_name = 'Pidgey'),
+        (SELECT move_id FROM move WHERE move_name  = 'Quick Attack')); 
+
+INSERT INTO pokemonmove (pokemon_id, move_id)
+VALUES ((SELECT pokemon_id FROM pokemon WHERE pokemon_name = 'Pidgey'),
+        (SELECT move_id FROM move WHERE move_name  = 'Whirlwind')); 
+
 SELECT * FROM pokemonmove;
 
 
@@ -320,6 +356,19 @@ VALUES ((SELECT pokemon_id FROM pokemon WHERE pokemon_name = 'Eevee'),
 INSERT INTO pokemonweaknesses (pokemon_id, element_id)
 VALUES ((SELECT pokemon_id FROM pokemon WHERE pokemon_name = 'Pikachu'),
         (SELECT element_id FROM element WHERE element_name = 'ground'));
+
+-- Creating Pidgey weaknesses
+INSERT INTO pokemonweaknesses (pokemon_id, element_id)
+VALUES ((SELECT pokemon_id FROM pokemon WHERE pokemon_name = 'Pidgey'),
+        (SELECT element_id FROM element WHERE element_name = 'electric'));
+
+INSERT INTO pokemonweaknesses (pokemon_id, element_id)
+VALUES ((SELECT pokemon_id FROM pokemon WHERE pokemon_name = 'Pidgey'),
+        (SELECT element_id FROM element WHERE element_name = 'ice'));
+
+INSERT INTO pokemonweaknesses (pokemon_id, element_id)
+VALUES ((SELECT pokemon_id FROM pokemon WHERE pokemon_name = 'Pidgey'),
+        (SELECT element_id FROM element WHERE element_name = 'rock'));
 
 
 
@@ -382,6 +431,19 @@ VALUES ((SELECT pokemon_id FROM pokemon WHERE pokemon_name = 'Pikachu'),
 INSERT INTO pokemonstrengths (pokemon_id, element_id)
 VALUES ((SELECT pokemon_id FROM pokemon WHERE pokemon_name = 'Pikachu'),
         (SELECT element_id FROM element WHERE element_name = 'flying'));
+
+-- Creating Pidgey strengths
+INSERT INTO pokemonstrengths (pokemon_id, element_id)
+VALUES ((SELECT pokemon_id FROM pokemon WHERE pokemon_name = 'Pidgey'),
+        (SELECT element_id FROM element WHERE element_name = 'bug'));
+
+INSERT INTO pokemonstrengths (pokemon_id, element_id)
+VALUES ((SELECT pokemon_id FROM pokemon WHERE pokemon_name = 'Pidgey'),
+        (SELECT element_id FROM element WHERE element_name = 'grass'));
+
+INSERT INTO pokemonstrengths (pokemon_id, element_id)
+VALUES ((SELECT pokemon_id FROM pokemon WHERE pokemon_name = 'Pidgey'),
+        (SELECT element_id FROM element WHERE element_name = 'ground'));
 
 SELECT * FROM pokemonstrengths;
 
