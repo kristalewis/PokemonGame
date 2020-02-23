@@ -326,65 +326,63 @@ VALUES ((SELECT pokemon_id FROM pokemon WHERE pokemon_name = 'Pikachu'),
 -- Creating pokemon strengths
 
 -- Creating Bulbasaur strengths
-INSERT INTO pokemonweaknesses (pokemon_id, element_id)
+INSERT INTO pokemonstrengths (pokemon_id, element_id)
 VALUES ((SELECT pokemon_id FROM pokemon WHERE pokemon_name = 'Bulbasaur'),
         (SELECT element_id FROM element WHERE element_name = 'water'));
 
-INSERT INTO pokemonweaknesses (pokemon_id, element_id)
+INSERT INTO pokemonstrengths (pokemon_id, element_id)
 VALUES ((SELECT pokemon_id FROM pokemon WHERE pokemon_name = 'Bulbasaur'),
         (SELECT element_id FROM element WHERE element_name = 'grass'));
 
-INSERT INTO pokemonweaknesses (pokemon_id, element_id)
+INSERT INTO pokemonstrengths (pokemon_id, element_id)
 VALUES ((SELECT pokemon_id FROM pokemon WHERE pokemon_name = 'Bulbasaur'),
         (SELECT element_id FROM element WHERE element_name = 'electric'));
 
-INSERT INTO pokemonweaknesses (pokemon_id, element_id)
+INSERT INTO pokemonstrengths (pokemon_id, element_id)
 VALUES ((SELECT pokemon_id FROM pokemon WHERE pokemon_name = 'Bulbasaur'),
         (SELECT element_id FROM element WHERE element_name = 'ground'));
 
 -- Creating Squirtle strengths
-INSERT INTO pokemonweaknesses (pokemon_id, element_id)
+INSERT INTO pokemonstrengths (pokemon_id, element_id)
 VALUES ((SELECT pokemon_id FROM pokemon WHERE pokemon_name = 'Squirtle'),
         (SELECT element_id FROM element WHERE element_name = 'water'));
 
-INSERT INTO pokemonweaknesses (pokemon_id, element_id)
+INSERT INTO pokemonstrengths (pokemon_id, element_id)
 VALUES ((SELECT pokemon_id FROM pokemon WHERE pokemon_name = 'Squirtle'),
         (SELECT element_id FROM element WHERE element_name = 'fire'));
 
-INSERT INTO pokemonweaknesses (pokemon_id, element_id)
+INSERT INTO pokemonstrengths (pokemon_id, element_id)
 VALUES ((SELECT pokemon_id FROM pokemon WHERE pokemon_name = 'Squirtle'),
         (SELECT element_id FROM element WHERE element_name = 'ice'));
 
 -- Creating Charmander strengths
-INSERT INTO pokemonweaknesses (pokemon_id, element_id)
+INSERT INTO pokemonstrengths (pokemon_id, element_id)
 VALUES ((SELECT pokemon_id FROM pokemon WHERE pokemon_name = 'Charmander'),
         (SELECT element_id FROM element WHERE element_name = 'fire'));
 
-INSERT INTO pokemonweaknesses (pokemon_id, element_id)
+INSERT INTO pokemonstrengths (pokemon_id, element_id)
 VALUES ((SELECT pokemon_id FROM pokemon WHERE pokemon_name = 'Charmander'),
         (SELECT element_id FROM element WHERE element_name = 'grass'));
 
-INSERT INTO pokemonweaknesses (pokemon_id, element_id)
+INSERT INTO pokemonstrengths (pokemon_id, element_id)
 VALUES ((SELECT pokemon_id FROM pokemon WHERE pokemon_name = 'Charmander'),
         (SELECT element_id FROM element WHERE element_name = 'ice'));
 
-INSERT INTO pokemonweaknesses (pokemon_id, element_id)
+INSERT INTO pokemonstrengths (pokemon_id, element_id)
 VALUES ((SELECT pokemon_id FROM pokemon WHERE pokemon_name = 'Charmander'),
         (SELECT element_id FROM element WHERE element_name = 'bug'));
 
 -- Creating Eevee strengths (Eevee has none)
 
 -- Creating Pikachu strengths
-INSERT INTO pokemonweaknesses (pokemon_id, element_id)
+INSERT INTO pokemonstrengths (pokemon_id, element_id)
 VALUES ((SELECT pokemon_id FROM pokemon WHERE pokemon_name = 'Pikachu'),
         (SELECT element_id FROM element WHERE element_name = 'electric'));
 
-INSERT INTO pokemonweaknesses (pokemon_id, element_id)
+INSERT INTO pokemonstrengths (pokemon_id, element_id)
 VALUES ((SELECT pokemon_id FROM pokemon WHERE pokemon_name = 'Pikachu'),
         (SELECT element_id FROM element WHERE element_name = 'flying'));
 
-
-
-
+SELECT * FROM pokemonstrengths;
 
 

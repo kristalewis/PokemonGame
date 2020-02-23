@@ -7,6 +7,7 @@ import java.util.Random;
 
 public class Pokemon {
 
+	private int pokemonId;
 	private String name;
 	private int hP;
 	private String type;
@@ -27,8 +28,20 @@ public class Pokemon {
 		this.type = type;
 	}
 	
+	public int getPokemonId() {
+		return pokemonId;
+	}
+	
+	public void setPokemonId(int pokemonId) {
+		this.pokemonId = pokemonId;
+	}
+	
 	public String getName() {
 		return name;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 	public int gethP() {
@@ -41,6 +54,10 @@ public class Pokemon {
 	
 	public String getType() {
 		return type;
+	}
+	
+	public void setType(String type) {
+		this.type = type;
 	}
 	
 	public void setHasTrainer (boolean isHuman) {
@@ -66,15 +83,15 @@ public class Pokemon {
 		this.attackStatChange += attackStatChange;
 	}
 	
-	public void setWeaknesses(String[] weaknesses) {
-		for(int i = 0; i < weaknesses.length; i++) {
-			this.weaknesses.add(weaknesses[i]);
+	public void setWeaknesses(List<String> weaknesses) {
+		for(String weakness : weaknesses) {
+			this.weaknesses.add(weakness);
 		}
 	}
 	
-	public void setStrengths(String[] strengths) {
-		for(int i = 0; i < strengths.length; i++) {
-			this.strengths.add(strengths[i]);
+	public void setStrengths(List<String> strengths) {
+		for(String strength : strengths) {
+			this.strengths.add(strength);
 		}
 	}
 	
@@ -98,7 +115,6 @@ public class Pokemon {
 			moves.add(currentMove);
 		}
 	}
-	
 	
 	
 }

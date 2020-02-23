@@ -8,12 +8,12 @@ public class Charmander extends Pokemon {
 	String[] charmanderWeaknesses = new String[] {"water", "rock", "ground"};
 	String[] charmanderStrengths = new String[] {"fire", "grass", "ice", "bug"};
 
-	public Charmander() {
-		super("Charmander", 23, "fire");
-		super.setWeaknesses(charmanderWeaknesses);
-		super.setStrengths(charmanderStrengths);
-		super.createMoveList(charmanderMoves, charmanderMoveTypes, charmanderMoveValues);
-	}
+//	public Charmander() {
+//		super("Charmander", 23, "fire");
+//		super.setWeaknesses(charmanderWeaknesses);
+//		super.setStrengths(charmanderStrengths);
+//		super.createMoveList(charmanderMoves, charmanderMoveTypes, charmanderMoveValues);
+//	}
 	
 	@Override
 	public String toString() {

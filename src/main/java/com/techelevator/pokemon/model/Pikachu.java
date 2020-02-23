@@ -7,13 +7,13 @@ public class Pikachu extends Pokemon {
 	String[] pikachuMoveTypes = new String[] {"electric", "normal", "normal", "normal"};
 	String[] pikachuWeaknesses = new String[] {"ground"};
 	String[] pikachuStrengths = new String[] {"electric", "flying"};
-	
-	public Pikachu() {
-		super("Pikachu", 23, "electric");
-		super.setWeaknesses(pikachuWeaknesses);
-		super.setStrengths(pikachuStrengths);
-		super.createMoveList(pikachuMoves, pikachuMoveTypes, pikachuMoveValues);
-	}
+//	
+//	public Pikachu() {
+//		super("Pikachu", 23, "electric");
+//		super.setWeaknesses(pikachuWeaknesses);
+//		super.setStrengths(pikachuStrengths);
+//		super.createMoveList(pikachuMoves, pikachuMoveTypes, pikachuMoveValues);
+//	}
 	
 	@Override
 	public String toString() {

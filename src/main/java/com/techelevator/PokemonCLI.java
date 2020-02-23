@@ -1,10 +1,17 @@
 package com.techelevator;
 
+import java.util.List;
 import java.util.Scanner;
 
-import org.apache.commons.dbcp.BasicDataSource;
+import org.apache.commons.dbcp2.BasicDataSource;
 
 import com.techelevator.pokemon.model.Battle;
+import com.techelevator.pokemon.model.Move;
+import com.techelevator.pokemon.model.MoveDAO;
+import com.techelevator.pokemon.model.Pokemon;
+import com.techelevator.pokemon.model.PokemonDAO;
+import com.techelevator.pokemon.model.jdbc.JDBCMoveDAO;
+import com.techelevator.pokemon.model.jdbc.JDBCPokemonDAO;
 
 public class PokemonCLI {
 
@@ -13,6 +20,10 @@ public class PokemonCLI {
 	private boolean battleTypeHasBeenChosen;
 	private int battleTypeAsInt = 0;
 	private String battleTypeChoice;
+	private boolean pokemonMade;
+	
+	private PokemonDAO pokemonDAO;
+	private MoveDAO moveDAO;
 	
 	private static final int COM_VS_COM_BATTLE = 1;
 	private static final int TRAINER_VS_COM_BATTLE = 2;
@@ -29,17 +40,13 @@ public class PokemonCLI {
 		battle = new Battle();
 		battleTypeHasBeenChosen = false;
 		
-		BasicDataSource 
+		BasicDataSource dataSource = new BasicDataSource();
+		dataSource.setUrl("jdbc:postgresql://localhost:5432/pokemon");
+		dataSource.setUsername("postgres");
+		dataSource.setPassword(System.getenv("DB_PASSWORD"));
 		
-//		BasicDataSource dataSource = new BasicDataSource();
-//		dataSource.setUrl("jdbc:postgresql://localhost:5432/campground");
-//		dataSource.setUsername("postgres");
-//		dataSource.setPassword("postgres1");
-		
-//		campgroundDao = new JDBCCampgroundDAO(dataSource);
-//		siteDao = new JDBCSiteDAO(dataSource);
-//		reservationDao = new JDBCReservationDAO(dataSource);
-//		parkDao = new JDBCParkDAO(dataSource);	
+		pokemonDAO = new JDBCPokemonDAO(dataSource);	
+		moveDAO = new JDBCMoveDAO(dataSource);
 	}
 	
 	private void run() {
@@ -81,23 +88,28 @@ public class PokemonCLI {
 	private void choosePokemon() {
 		for (int i = 1; i < 3; i++) {
 			if (battleTypeAsInt == COM_VS_COM_BATTLE) {
+				battle.setTypeOfBattle(COM_VS_COM_BATTLE);
 				comVsComOptions(i);
-				if (!battle.pokemonCreated()) {
+				if (!pokemonMade) {
 					i--;
 				}
 			}
 			if (battleTypeAsInt == TRAINER_VS_COM_BATTLE && i == 1) {
+				battle.setTypeOfBattle(TRAINER_VS_COM_BATTLE);
 				trainerVsComTrainerPick(i);
-				if (!battle.pokemonCreated()) {
+				if (!pokemonMade) {
 					i--;
 				}
 			} else if (battleTypeAsInt == TRAINER_VS_COM_BATTLE && i == 2) {
 				System.out.println("Your opponent is choosing...");
-				System.out.println(battle.chooseComPokemon());
+				Pokemon comPokemon = pokemonDAO.getPokemonById(battle.chooseComPokemon());
+				battle.addPokemonToBattle(comPokemon);
+				System.out.println(comPokemon.getName()+  ", the " + pokemonDAO.getPokemonType(comPokemon) + " type pokemon was chosen!");
 			}
 			if (battleTypeAsInt == TRAINER_VS_TRAINER_BATTLE) {
+				battle.setTypeOfBattle(TRAINER_VS_TRAINER_BATTLE);
 				trainerVsTrainerPick(i);
-				if (!battle.pokemonCreated()) {
+				if (!pokemonMade) {
 					i--;
 				}
 			}
@@ -106,9 +118,34 @@ public class PokemonCLI {
 	}
 	
 	private void getPokemonChoice() {
-		System.out.print("(B)bulasaur, (C)harmander, (S)quirtle, (E)evee, or (P)ikachu? ");
-		String input = scan.nextLine().toUpperCase();
-		System.out.println(battle.createPokemon(battle, input));
+		List<Pokemon> pokemon = pokemonDAO.getAllPokemon();
+		for (Pokemon p : pokemon) {
+			System.out.format("%d. %s\n", p.getPokemonId(), p.getName());
+		}
+		try {
+			int userPokemonChoice = Integer.parseInt(scan.nextLine());
+			pokemonMade = false;
+			for (Pokemon p : pokemon) {
+				if (userPokemonChoice == p.getPokemonId()) {
+					createAndSetUpPokemon(userPokemonChoice);
+					pokemonMade = true;
+				}
+			}
+			if(!pokemonMade) {
+				System.out.println("Not a valid pokemon, try again.");
+			}	
+		} catch (NumberFormatException e) {
+			System.out.println("Not a valid pokemon, choose again.");
+		}
+	}
+	
+	private void createAndSetUpPokemon(int userPokemonChoice) {
+		Pokemon chosenPokemon = pokemonDAO.getPokemonById(userPokemonChoice);
+		battle.addPokemonToBattle(chosenPokemon);
+		battle.setIfPokemonHasTrainer(chosenPokemon);
+		battle.setTrainerOrComNumber(chosenPokemon);
+		System.out.println(chosenPokemon.getName() + ", the " + 
+						   pokemonDAO.getPokemonType(chosenPokemon) + " type pokemon was chosen!");
 	}
 	
 	private void comVsComOptions(int i) {
@@ -138,22 +175,27 @@ public class PokemonCLI {
 		while (!battle.isBattleOver()) {
 			battle.setWhoIsAttacking();
 			if (battle.getPokemonAttacking().hasTrainer()) {
-				System.out.print(battle.displayMoves());
-				seeIfMoveIsValid();
+				List<Move> moves = moveDAO.getPokemonMoves(battle.getPokemonAttacking()); 
+				scan.nextLine();
+				System.out.print(battle.displayMoves(moves));
+				seeIfMoveIsValid(moves);
 			} else {
 				scan.nextLine();
-				System.out.println("\n" + battle.comPokemonTurn());
+				Move moveUsed = moveDAO.getRandomComMove(battle.getPokemonAttacking());
+				System.out.println(battle.pokemonTurn(moveUsed));
 			}
 		}
 	}
 	
-	private void seeIfMoveIsValid() {
+	private void seeIfMoveIsValid(List<Move> moves) {
 		try {
+			boolean moveChosen = false;
 			int parsedMoveInput = Integer.parseInt(scan.nextLine());
-			int moveChosen = parsedMoveInput - 1;
-			if (moveChosen >= 0 && moveChosen <= 3) {
-				System.out.print(battle.pokemonTurn(moveChosen));
-			} else {
+			if (parsedMoveInput >= 1 && parsedMoveInput <= 4) {
+				moveChosen = true;
+				System.out.print(battle.pokemonTurn(moves.get(parsedMoveInput - 1)));
+			}
+			if (!moveChosen) {
 				System.out.println("Not a valid move choice, choose again.");
 			}
 		} catch (NumberFormatException e) {

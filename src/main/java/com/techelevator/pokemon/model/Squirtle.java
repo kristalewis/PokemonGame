@@ -8,12 +8,12 @@ public class Squirtle extends Pokemon {
 	String[] squirtleWeaknesses = new String[] {"electric", "grass"};
 	String[] squirtleStrengths = new String[] {"water", "fire", "ice"};
 	
-	public Squirtle() {
-		super("Squirtle", 24, "water");
-		super.setWeaknesses(squirtleWeaknesses);
-		super.setStrengths(squirtleStrengths);
-		super.createMoveList(squirtleMoves, squirtleMoveTypes, squirtleMoveValues);
-	}
+//	public Squirtle() {
+//		super("Squirtle", 24, "water");
+//		super.setWeaknesses(squirtleWeaknesses);
+//		super.setStrengths(squirtleStrengths);
+//		super.createMoveList(squirtleMoves, squirtleMoveTypes, squirtleMoveValues);
+//	}
 	
 	@Override
 	public String toString() {

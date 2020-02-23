@@ -8,12 +8,12 @@ public class Bulbasaur extends Pokemon {
 	String[] bulbasaurWeaknesses = new String[] {"fire", "ice", "flying", "bug"};
 	String[] bulbasaurStrengths = new String[] {"water", "grass", "electric", "ground"};
 	
-	public Bulbasaur() {
-		super("Bulbasaur", 24, "grass/poison");
-		super.setWeaknesses(bulbasaurWeaknesses);
-		super.setStrengths(bulbasaurStrengths);
-		super.createMoveList(bulbasaurMoves, bulbasaurMoveTypes, bulbasaurMoveValues);
-	}
+//	public Bulbasaur() {
+//		super("Bulbasaur", 24, "grass/poison");
+//		super.setWeaknesses(bulbasaurWeaknesses);
+//		super.setStrengths(bulbasaurStrengths);
+//		super.createMoveList(bulbasaurMoves, bulbasaurMoveTypes, bulbasaurMoveValues);
+//	}
 	
 	@Override
 	public String toString() {

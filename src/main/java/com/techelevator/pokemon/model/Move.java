@@ -4,21 +4,55 @@ import java.util.Random;
 
 public class Move {
 
+	private int moveId;
 	private String name;
 	private String elementType;
+	private String moveType;
 	private int damage;
 	private boolean isCriticalHit = false;
 	
+	public int getMoveId() {
+		return moveId;
+	}
+	
+	public void setMoveId(int moveId) {
+		this.moveId = moveId;
+	}
+	
 	public String getName() {
 		return name;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getElementType() {
 		return elementType;
 	}
+	
+	public void setElementType(String elementType) {
+		this.elementType = elementType;
+	}
+	
+	public String getMoveType() {
+		return moveType;
+	}
+	
+	public void setMoveType(String moveType) {
+		this.moveType = moveType;
+	}
 
 	public int getDamage() {
 		return damage;
+	}
+	
+	public void setDamage(int damage) {
+		this.damage = damage;
+	}
+	
+	public Move() {
+		
 	}
 
 	public Move(String name, String elementType, int damage) {
