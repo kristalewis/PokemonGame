@@ -1,4 +1,4 @@
-package com.techelevator.pokemon.model.jdbc;
+package com.techelevator.pokemon.move.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,11 +8,11 @@ import javax.sql.DataSource;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
+import org.springframework.stereotype.Component;
 
-import com.techelevator.pokemon.model.Move;
-import com.techelevator.pokemon.model.MoveDAO;
 import com.techelevator.pokemon.model.Pokemon;
 
+@Component
 public class JDBCMoveDAO implements MoveDAO {
 	
 	private JdbcTemplate jdbcTemplate;
@@ -43,6 +43,20 @@ public class JDBCMoveDAO implements MoveDAO {
 			moves.add(createMoveFromRow(results));
 		}
 		return moves;
+	}
+	
+	@Override
+	public Move getMoveByName(String moveUsed) {
+		Move move = new Move();
+		String sql = "SELECT move_id, move_name, move_element, movetype.move_type, base_damage "
+				   + "FROM move " 
+				   + "JOIN moveType ON move.move_type = moveType.move_type_id "
+				   + "WHERE move_name = ?;";
+		SqlRowSet result = jdbcTemplate.queryForRowSet(sql, moveUsed);
+		while(result.next()) {
+			move = createMoveFromRow(result);
+		}
+		return move;
 	}
 	
 	private Move createMoveFromRow(SqlRowSet row) {

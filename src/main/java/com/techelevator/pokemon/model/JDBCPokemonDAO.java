@@ -1,4 +1,4 @@
-package com.techelevator.pokemon.model.jdbc;
+package com.techelevator.pokemon.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,10 +7,9 @@ import javax.sql.DataSource;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
+import org.springframework.stereotype.Component;
 
-import com.techelevator.pokemon.model.Pokemon;
-import com.techelevator.pokemon.model.PokemonDAO;
-
+@Component
 public class JDBCPokemonDAO implements PokemonDAO {
 	
 	private JdbcTemplate jdbcTemplate;

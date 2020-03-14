@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.techelevator.pokemon.move.model.Move;
+
 
 public class Pokemon {
 
@@ -11,12 +13,13 @@ public class Pokemon {
 	private String name;
 	private int hP;
 	private String type;
-	List <Move> moves = new ArrayList<Move>();
+	private List <Move> moves = new ArrayList<Move>();
 	private List<String> weaknesses = new ArrayList <String>();
 	private List<String> strengths = new ArrayList <String>();
 	private int attackStatChange = 0;
 	private int accuracyStat = 0;
 	private boolean hasTrainer = false;
+	private boolean isTrained = false;
 	private int trainer;
 	
 	
@@ -73,6 +76,14 @@ public class Pokemon {
 		this.hasTrainer = isHuman;
 	}
 	
+	public void setIsTrained() {
+		this.isTrained = this.hasTrainer;
+	}
+	
+	public boolean isTrained() {
+		return this.isTrained;
+	}
+	
 	public boolean hasTrainer () {
 		return this.hasTrainer;
 	}
@@ -82,6 +93,14 @@ public class Pokemon {
 	
 	public int getTrainerOrCom() {
 		return trainer;
+	}
+	
+	public List<Move> getMoves() {
+		return moves;
+	}
+
+	public void setMoves(List<Move> moves) {
+		this.moves = moves;
 	}
 	
 	public int getAttackStatChange() {

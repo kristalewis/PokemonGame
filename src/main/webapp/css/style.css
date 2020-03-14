@@ -1,0 +1,102 @@
+* {
+	box-sizing: border-box;
+}
+
+body {
+	width: 90%;
+	margin: auto;
+	margin-top: 2%;
+}
+
+header h2 {
+	margin-left: 1%;
+	text-decoration: none;
+	color: black;
+}
+
+a:hover {
+	text-decoration: none;
+	color: black;
+}
+
+#battleTypeFormDiv {
+	margin-top: 2%;
+	background-color: lightgrey;
+	border-radius: 20px;
+	width: 45%;
+	padding-top: 2%;
+	padding-bottom: 2%;
+}
+
+label {
+	display: block;
+}
+
+#battleTypeForm {
+	padding-left: 10%;
+}
+
+.battleRadioLabel {
+	margin-bottom: 0.7rem;
+}
+
+.header img {
+	width: 60%;
+	border-radius: 20px;
+}
+
+.header {
+	background-color: #f2f2f2;
+	border-radius: 20px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+h2 {
+	display: inline;
+}
+
+h4 {
+	margin-top: 5%;
+}
+
+.choosePokemonDiv {
+	margin-top: 2%;
+	background-color: lightgrey;
+	border-radius: 20px;
+	padding-top: 2%;
+	padding-bottom: 2%;
+	width: 45%;
+}
+
+.pokemonChoiceInputs {
+	display: flex;
+	justify-content: space-around;
+}
+
+.pokemonInput p {
+	font-weight: bold;
+}
+
+.buttonDiv {
+	width: 80%;
+	margin: auto;
+}
+
+.battleDiv {
+	margin-top: 2%;
+	background-color: lightgrey;
+	border-radius: 20px;
+	width: 45%;
+	padding: 2%;
+	padding-left: 4%;
+}
+
+.pokemonTurn {
+	margin-top: 2%;
+}
+
+.battleButton {
+	margin-top: 3%;
+}

@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import com.techelevator.pokemon.move.model.Move;
+
 public class Battle {
 
 	private List<Pokemon> battlingPokemon = new ArrayList<Pokemon>();
@@ -20,12 +22,22 @@ public class Battle {
 	private int moveDamage = 0;
 	private boolean attackHit;
 	private int typeOfBattle;
-	private static final int COM_VS_COM = 1;
-	private static final int TRAINER_VS_COM = 2;
-	private static final int TRAINER_VS_TRAINER = 3;
+	public static final int COM_VS_COM = 1;
+	public static final int TRAINER_VS_COM = 2;
+	public static final int TRAINER_VS_TRAINER = 3;
+	public static final String[] BATTLE_TYPES = {"Computer Vs. Computer", "Trainer Vs. Computer",
+												  "Trainer Vs. Trainer"};
+	
+	public List<Pokemon> getBattlingPokemon() {
+		return battlingPokemon;
+	}
 	
 	public void setTypeOfBattle(int battleType) {
 		this.typeOfBattle = battleType;
+	}
+	
+	public int getTypeOfBattle() {
+		return this.typeOfBattle;
 	}
 	
 	public void addPokemonToBattle(Pokemon chosenPokemon) {
@@ -125,7 +137,9 @@ public class Battle {
 			 result += "Com " + pokemonAttacking.getTrainerOrCom() + "'s ";
 		}
 		result += pokemonAttacking.getName() + " used " + moveUsed.getName() + "!";
+		System.out.println(moveUsed.getMoveType());
 		if (moveUsed.isStatChangingMove()) {
+			System.out.println("Hit branch");
 			turnCount++;
 			result += doStatChangingMove(moveUsed);
 			return result;
@@ -232,8 +246,17 @@ public class Battle {
 		return "The battle is over! " + winner.getName() + " has won!\nCongratulations " + winner.getName() + "!";
 	}
 	
+	public Pokemon getWinningPokemon() {
+		return winner;
+	}
+	
 	public Pokemon getPokemonAttacking() {
 		return pokemonAttacking;
 	}
+	
+	public Pokemon getPokemonGettingAttacked() {
+		return pokemonGettingAttacked;
+	}
+
 
 }

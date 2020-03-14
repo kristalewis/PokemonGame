@@ -1,6 +1,8 @@
-package com.techelevator.pokemon.model;
+package com.techelevator.pokemon.move.model;
 
 import java.util.Random;
+
+import com.techelevator.pokemon.model.Pokemon;
 
 public class Move {
 
@@ -9,6 +11,7 @@ public class Move {
 	private String elementType;
 	private String moveType;
 	private int damage;
+	private String message;
 	private boolean isCriticalHit = false;
 	
 	public int getMoveId() {
@@ -49,6 +52,14 @@ public class Move {
 	
 	public void setDamage(int damage) {
 		this.damage = damage;
+	}
+	
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
 	}
 	
 	public Move() {

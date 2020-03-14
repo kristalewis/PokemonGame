@@ -6,12 +6,12 @@ import java.util.Scanner;
 import org.apache.commons.dbcp2.BasicDataSource;
 
 import com.techelevator.pokemon.model.Battle;
-import com.techelevator.pokemon.model.Move;
-import com.techelevator.pokemon.model.MoveDAO;
+import com.techelevator.pokemon.model.JDBCPokemonDAO;
 import com.techelevator.pokemon.model.Pokemon;
 import com.techelevator.pokemon.model.PokemonDAO;
-import com.techelevator.pokemon.model.jdbc.JDBCMoveDAO;
-import com.techelevator.pokemon.model.jdbc.JDBCPokemonDAO;
+import com.techelevator.pokemon.move.model.JDBCMoveDAO;
+import com.techelevator.pokemon.move.model.Move;
+import com.techelevator.pokemon.move.model.MoveDAO;
 
 public class PokemonCLI {
 
@@ -202,5 +202,7 @@ public class PokemonCLI {
 			System.out.println("Not a valid move choice, choose again.");
 		}
 	}
+	
+	
 
 }
