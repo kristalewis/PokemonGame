@@ -60,11 +60,13 @@ public class PokemonController {
 	
 	@PostMapping(path="/choosepokemon")
 	public String submitPokemonChoicesCvC(@RequestParam String firstPokemon, 
-						@RequestParam String secondPokemon, HttpSession session) {
+						@RequestParam String secondPokemon, HttpSession session,
+						RedirectAttributes ra) {
 		Battle battle = (Battle)session.getAttribute("battle");
 		setUpPokemonAndBattle(pokemonDao.getPokemonById(Integer.parseInt(firstPokemon)), battle);
 		setUpPokemonAndBattle(pokemonDao.getPokemonById(Integer.parseInt(secondPokemon)), battle);
-		battle.whoGoesFirst();
+		ra.addFlashAttribute("battleAnnouncement", battle.announceBattle());
+		ra.addFlashAttribute("whoGoesFirst", battle.whoGoesFirst());
 		battle.setWhoIsAttacking();
 		session.setAttribute("battle", battle);
 		return "redirect:/battle";

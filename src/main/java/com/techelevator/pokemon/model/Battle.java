@@ -68,7 +68,8 @@ public class Battle {
 	}
  
 	public String announceBattle() {
-		return "This battle is between " + battlingPokemon.get(0).getName() + " and " + battlingPokemon.get(1).getName() + "!";
+		return "This battle is between " + battlingPokemon.get(0).getName() + 
+			   " and " + battlingPokemon.get(1).getName() + "!";
 	}
 
 	public String whoGoesFirst() {
@@ -130,6 +131,7 @@ public class Battle {
 	
 	public String pokemonTurn(Move moveUsed) {
 		String result = "";
+		attackHit = false;
 		this.moveUsed = moveUsed;
 		moveDamage = moveUsed.getDamage();
 		if (pokemonAttacking.getName().equals(pokemonGettingAttacked.getName()) 
@@ -137,12 +139,8 @@ public class Battle {
 			 result += "Com " + pokemonAttacking.getTrainerOrCom() + "'s ";
 		}
 		result += pokemonAttacking.getName() + " used " + moveUsed.getName() + "!";
-		System.out.println(moveUsed.getMoveType());
 		if (moveUsed.isStatChangingMove()) {
-			System.out.println("Hit branch");
-			turnCount++;
 			result += doStatChangingMove(moveUsed);
-			return result;
 		} else if (moveUsed.isNoEffectMove()) {
 			result += "\nBut it had no effect.\n";
 		} else {

@@ -4,6 +4,11 @@
 
 	<h4>Let the Battle Begin!</h4>
 	
+	<c:if test="${battleAnnouncement != null && whoGoesFirst != null}">
+		<p>${battleAnnouncement}</p>
+		<p>${whoGoesFirst}</p>
+	</c:if>
+	
 	<c:if test="${pokemonTurn != null}">
 		<p class="pokemonTurn">${pokemonTurn}</p>
 	</c:if>
