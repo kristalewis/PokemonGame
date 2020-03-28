@@ -21,13 +21,13 @@
 			<div class="form-group pokemonInput">
 			<c:choose>
 				<c:when test="${sessionScope.battle.typeOfBattle == 1}">
-					<p>Computer #1 Pokemon</p>
+					<p>Computer #1 Pokémon</p>
 				</c:when>
 				<c:when test="${sessionScope.battle.typeOfBattle == 2}">
-					<p>Trainer Pokemon</p>
+					<p>Trainer Pokémon</p>
 				</c:when>
 				<c:otherwise>
-					<p>Trainer #1 Pokemon</p>
+					<p>Trainer #1 Pokémon</p>
 				</c:otherwise>
 			</c:choose>
 			<c:forEach items="${pokemon}" var="pokemon">
@@ -41,13 +41,13 @@
 			<div class="form-group pokemonInput">
 			<c:choose>
 				<c:when test="${sessionScope.battle.typeOfBattle == 1}">
-					<p>Computer #2 Pokemon</p>
+					<p>Computer #2 Pokémon</p>
 				</c:when>
 				<c:when test="${sessionScope.battle.typeOfBattle == 2}">
-					<p>Computer Pokemon</p>
+					<p>Computer Pokémon</p>
 				</c:when>
 				<c:otherwise>
-					<p>Trainer #2 Pokemon</p>
+					<p>Trainer #2 Pokémon</p>
 				</c:otherwise>
 			</c:choose>
 			<c:forEach items="${pokemon}" var="pokemon">

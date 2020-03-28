@@ -2,48 +2,20 @@
 
 <c:import url="/WEB-INF/jsp/commons/header.jsp" />
 
-	<h4>Let the Battle Begin!</h4>
+	<h4>Choose your battle type</h4>
 	
-	<c:if test="${battleAnnouncement != null && whoGoesFirst != null}">
-		<p>${battleAnnouncement}</p>
-		<p>${whoGoesFirst}</p>
-	</c:if>
-	
-	<c:if test="${pokemonTurn != null}">
-		<p class="pokemonTurn">${pokemonTurn}</p>
-	</c:if>
-	
-	
-<div class="battleDiv">
-	<c:choose>
-		<c:when test="${sessionScope.battle.battleOver}">
-			<p>${sessionScope.battle.winningPokemon.name} is the winner!</p>
-			<p>Congratulations ${sessionScope.battle.winningPokemon.name}!</p>
-		</c:when>
-		<c:when test="${sessionScope.battle.pokemonAttacking.trained}">
-			<c:set var="pokemonAttacking" value="${sessionScope.battle.pokemonAttacking}"/>
-			<p>What will ${pokemonAttacking.name} do?</p>
-			<c:url value="/battle" var="battleFormUrl"/>
-			<form action="${battleFormUrl}" method="POST">
-			<c:forEach items="${battle.pokemonAttacking.moves}" var="move">
+	<div id="battleTypeFormDiv">
+		<c:url value="/battle" var="$battleChoiceUrl"/>
+		<form id="battleTypeForm" action="${battleChoiceUrl}" method="POST">
+			<c:forEach items="${battleTypes}" var="battleType">
 				<div class="form-check disabled">
-					<input type="radio" value="${move.name}" name="moveUsed" 
-						   id="${move.name}" class="form-check-input" required="required"/>
-					<label class="form-check-label" for="${move.name}">${move.name}</label>
+					<input type="radio" value="${battleType}" name="battleChoice" 
+						   id="${battleType}" class="form-check-input" required="required"/>
+					<label class="form-check-label battleRadioLabel" for="${battleType}">${battleType}</label>
 				</div>
 			</c:forEach>
-			<button type="submit" class="btn btn-secondary battleButton">Attack</button>
-			</form>
-		</c:when>
-		<c:otherwise>
-			<p>${sessionScope.battle.pokemonAttacking.name} is ready to attack!</p>
-			<c:url value="/battle" var="battleFormUrl"/>
-			<form action="${battleFormUrl}" method="POST">
-				<input type="hidden" name="pokemonAttacking" value="${sessionScope.battle.pokemonAttacking.name}"/>
-				<button type="submit" class="btn btn-secondary battleButton">Do Com Move</button>
-			</form>
-		</c:otherwise>
-	</c:choose>
-</div>
-
+		<button type="submit" class="btn btn-secondary">Enter Arena</button>
+		</form>
+	</div>
+	
 <c:import url="/WEB-INF/jsp/commons/footer.jsp" />

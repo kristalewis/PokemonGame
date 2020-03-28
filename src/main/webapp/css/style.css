@@ -9,7 +9,7 @@ body {
 }
 
 header h2 {
-	margin-left: 1%;
+	margin-left: 5%;
 	text-decoration: none;
 	color: black;
 }
@@ -58,7 +58,7 @@ h2 {
 }
 
 h4 {
-	margin-top: 5%;
+	margin-top: 2%;
 }
 
 .choosePokemonDiv {
@@ -99,4 +99,41 @@ h4 {
 
 .battleButton {
 	margin-top: 3%;
+}
+
+nav a {
+	text-decoration: none;
+	color: white;
+	margin-right: 5%;
+}
+
+nav {
+	background-color: #5F676F;
+	border-radius: 10px;
+	margin-top: 1%;
+}
+
+#pokedexSearch {
+	width: 30%;
+	margin-bottom: 1%;
+}
+
+#welcomeParagraph {
+	width: 85%;
+}
+
+#pokedexDisplay {
+	display: flex;
+	margin-top: 5%;
+	margin-bottom: 5%;
+}
+
+#pokemonImage {
+	width: 20%;
+	height: auto;
+}
+
+#pokemonInfo {
+	width: 33%;
+	margin-left: 5%;
 }

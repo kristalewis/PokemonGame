@@ -25,16 +25,20 @@ public class PokemonController {
 	@Autowired
 	private MoveDAO moveDao;
 	
-	
 	@GetMapping(path="/")
-	public String getHomePage(ModelMap mm, HttpSession session) {
-		session.invalidate();
-		mm.put("battleTypes", Battle.BATTLE_TYPES);
+	public String getHomePage() {
 		return "home";
 	}
 	
-	@PostMapping(path="/")
-	public String battleChoice(@RequestParam String battleChoice, HttpSession session) {
+	@GetMapping(path="/battle")
+	public String getBattleChoicePage(ModelMap mm, HttpSession session) {
+		session.invalidate();
+		mm.put("battleTypes", Battle.BATTLE_TYPES);
+		return "battle";
+	}
+	
+	@PostMapping(path="/battle")
+	public String submitBattleChoice(@RequestParam String battleChoice, HttpSession session) {
 		for (String battleType : Battle.BATTLE_TYPES) {
 			if (battleChoice.equals(battleType)) {
 				Battle battle = new Battle();
@@ -49,17 +53,17 @@ public class PokemonController {
 				return "redirect:/choosepokemon";
 			}
 		}
-		return "/";
+		return "/battle";
 	}
 	
 	@GetMapping(path="/choosepokemon")
-	public String comVsComBattle(ModelMap mm) {
+	public String getChoosePokemonPage(ModelMap mm) {
 		mm.put("pokemon", pokemonDao.getAllPokemon());
 		return "choosepokemon";
 	}
 	
 	@PostMapping(path="/choosepokemon")
-	public String submitPokemonChoicesCvC(@RequestParam String firstPokemon, 
+	public String submitPokemonChoices(@RequestParam String firstPokemon, 
 						@RequestParam String secondPokemon, HttpSession session,
 						RedirectAttributes ra) {
 		Battle battle = (Battle)session.getAttribute("battle");
@@ -69,15 +73,15 @@ public class PokemonController {
 		ra.addFlashAttribute("whoGoesFirst", battle.whoGoesFirst());
 		battle.setWhoIsAttacking();
 		session.setAttribute("battle", battle);
-		return "redirect:/battle";
+		return "redirect:/fightbattle";
 	}
 
-	@GetMapping(path="/battle")
-	public String battle() {
-		return "battle";
+	@GetMapping(path="/fightbattle")
+	public String beginBattle() {
+		return "fightbattle";
 	}
 	
-	@PostMapping(path="/battle")
+	@PostMapping(path="/fightbattle")
 	public String battleMove(@RequestParam(required = false) String moveUsed, 
 								RedirectAttributes ra, HttpSession session) {
 		Battle battle = (Battle)session.getAttribute("battle");
@@ -91,7 +95,12 @@ public class PokemonController {
 		}
 		battle.setWhoIsAttacking();
 		session.setAttribute("battle", battle);
-		return "redirect:/battle";
+		return "redirect:/fightbattle";
+	}
+	
+	@GetMapping(path="/pokedex")
+	public String getPokedexPage(@RequestParam(required = false) String pokemon) {
+		return "pokedex";
 	}
 	
 	private void setUpPokemonAndBattle(Pokemon pokemon, Battle battle) {
