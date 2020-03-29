@@ -137,3 +137,44 @@ nav {
 	width: 33%;
 	margin-left: 5%;
 }
+
+@media only screen and (max-width: 600px) {
+	* {
+		font-size: 1.1rem;
+	}
+	
+	h2 {
+		font-size: 1rem;
+	}
+	
+	#pokemonImage {
+		width: 100%;
+		height: auto;
+		margin-bottom: 10%;
+	}
+	
+	#pokemonInfo {
+		width: 100%;
+	}
+	
+	#pokedexDisplay {
+		flex-wrap: wrap;
+	}
+	
+	#pokedexSearch {
+		width: 60%;
+	}
+	
+	.choosePokemonDiv {
+		width: 100%;
+		margin: 0;
+	}
+	
+	#battleTypeFormDiv {
+		width: 100%;
+	}
+	
+	.battleDiv {
+		width: 100%;
+	}
+}
