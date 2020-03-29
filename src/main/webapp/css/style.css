@@ -139,9 +139,6 @@ nav {
 }
 
 @media only screen and (max-width: 600px) {
-	* {
-		font-size: 1.1rem;
-	}
 	
 	h2 {
 		font-size: 1rem;
@@ -181,6 +178,7 @@ nav {
 	
 	.main {
 		width: 85%;
+		margin-bottom: 10%;
 	}
 	
 	#welcomeParagraph {
@@ -189,6 +187,10 @@ nav {
 	}
 	
 	h4 {
+		margin-top: 5%;
+	}
+	
+	header {
 		margin-top: 5%;
 	}
 }
