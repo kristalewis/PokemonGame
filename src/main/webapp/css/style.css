@@ -148,12 +148,13 @@ nav {
 	}
 	
 	#pokemonImage {
-		width: 100%;
+		width: 75%;
 		height: auto;
-		margin-bottom: 10%;
+		margin: auto;
 	}
 	
 	#pokemonInfo {
+		margin-top: 10%;
 		width: 100%;
 	}
 	
@@ -176,5 +177,18 @@ nav {
 	
 	.battleDiv {
 		width: 100%;
+	}
+	
+	.main {
+		width: 85%;
+	}
+	
+	#welcomeParagraph {
+		width: 100%;
+		margin-bottom: 5%;
+	}
+	
+	h4 {
+		margin-top: 5%;
 	}
 }
